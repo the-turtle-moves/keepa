@@ -2855,29 +2855,6 @@ class AsyncKeepa:
         response = await self._request("query", payload, wait=wait)
         return response["asinList"]
 
-    @is_documented_by(Keepa.deals)
-    async def deals(self, deal_parms, domain="US", wait=True):
-        """Documented in Keepa.deals."""
-        # verify valid keys
-        for key in deal_parms:
-            if key not in DEAL_REQUEST_KEYS:
-                raise ValueError(f'Invalid key "{key}"')
-
-            # verify json type
-            key_type = DEAL_REQUEST_KEYS[key]
-            deal_parms[key] = key_type(deal_parms[key])
-
-        deal_parms.setdefault("priceTypes", 0)
-
-        payload = {
-            "key": self.accesskey,
-            "domain": DCODES.index(domain),
-            "selection": json.dumps(deal_parms),
-        }
-
-        deals = await self._request("deal", payload, wait=wait)
-        return deals["deals"]
-
     async def _request(self, request_type, payload, wait=True):
         """Documented in Keepa._request."""
         while True:
